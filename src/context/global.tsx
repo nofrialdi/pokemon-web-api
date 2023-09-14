@@ -5,8 +5,9 @@ const GlobalContext = createContext({});
 //actions
 const LOADING = "LOADING";
 const GET_POKEMON = "GET_POKEMON";
-const GET_ALL_POKEMON = "GET_ALL_POKEMON";
-const GET_SEARCH = "GET_SEARCH";
+const GET_ALL_POKEMON = "GET_ALL_POKEMON_DATA";
+const GET_ALL_POKEMON_DATA = "GET_ALL_POKEMON_DATA";
+const SEARCH_POKEMON = "SEARCH_POKEMON";
 const GET_POKEMON_DATABASE = "GET_POKEMON_DATABASE";
 const NEXT = "NEXT";
 
@@ -25,6 +26,7 @@ const reducer = (state: any, action: any) => {
 				loading: false,
 			};
 	}
+
 	return state;
 };
 
@@ -41,7 +43,7 @@ export const GlobalProvider = ({ children }: any) => {
 	};
 
 	const [state, dispatch] = useReducer(reducer, initialState);
-	const [allPokemonData, setAllPokemonData] = useState([[]]);
+	const [allPokemonData, setAllPokemonData] = useState([]);
 
 	const allPokemon = async () => {
 		dispatch({ type: "LOADING" });
@@ -51,8 +53,9 @@ export const GlobalProvider = ({ children }: any) => {
 		// console.log(data);
 		dispatch({ type: GET_ALL_POKEMON, payload: data.results });
 
-		//fetch caracter data
-		const allPokemonData = [];
+		//fetch caracters data
+		const allPokemonData: any = [];
+
 		for (const pokemon of data.results) {
 			// console.log(pokemon);
 			const pokemonRes = await fetch(pokemon.url);
@@ -61,7 +64,6 @@ export const GlobalProvider = ({ children }: any) => {
 			// console.log(pokemonData);
 			allPokemonData.push(pokemonData);
 		}
-
 		setAllPokemonData(allPokemonData);
 	};
 
